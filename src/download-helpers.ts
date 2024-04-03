@@ -47,7 +47,7 @@ export async function fetchChecksums<T extends GeoIpDbName>(dbList?: readonly T[
 	const checksums = await Promise.all(
 		dbListToFetch.map(async (dbName): Promise<[T | GeoIpDbName, string]> => [
 			dbName,
-			await import('got')
+			await import('got').then(({ default: got }) => got(mirrorUrls.checksum[dbName]).text())
 				.then(({ got }) => got(mirrorUrls.checksum[dbName]).text())
 				.then(checksum => checksum.trim())
 		])
